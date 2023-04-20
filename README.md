@@ -45,8 +45,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-The application will run on port 3000.
-GET to the /examples end point will return Hello World.
+The application will run on port 3000.<br>
+GET to the /examples end point will return "Hello World".
 
 ## Test
 
