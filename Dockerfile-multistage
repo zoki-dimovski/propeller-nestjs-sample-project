@@ -1,0 +1,28 @@
+FROM node:lts-bullseye-slim AS deps
+WORKDIR /app
+COPY package*.json tsconfig*.json nest-cli.json ./
+RUN  npm install
+
+
+FROM node:lts-bullseye-slim AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED 1
+
+FROM node:lts-bullseye-slim AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+COPY --from=builder /app/tsconfig.build.json ./tsconfig.build.json
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/nest-cli.json ./nest-cli.json
+
+EXPOSE 3000
+ENV PORT 3000
+CMD ["npm", "start"]
