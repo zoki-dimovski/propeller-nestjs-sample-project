@@ -22,7 +22,7 @@ export class ExamplesController {
 
   @Get()
   findAll() {
-    return "Hello world";
+    return "Hello world - by Zoran.";
   }
 
   @Get(":id")
