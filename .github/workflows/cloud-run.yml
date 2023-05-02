@@ -50,10 +50,10 @@ jobs:
         run: |-
           docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
 
-          #      - name: Deploy
-          #        run: |-
-          #          gcloud run deploy $REPO_NAME \
-          #          --region $REGION \
-          #          --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
-          #          --platform "managed" \
-          #          --quiet
+#                - name: Deploy
+#                  run: |-
+#                    gcloud run deploy $REPO_NAME \
+#                    --region $REGION \
+#                    --image gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
+#                    --platform "managed" \
+#                    --quiet
