@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
        —name: propeller-test
-          image: #gcr link to image goes here
+          image: europe-west1-docker.pkg.dev/propeller-385509/propeller-images/propeller-test:latest
           ports:
            —containerPort: 3000
