@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +17,7 @@ spec:
         app: web
     spec:
       containers:
-       —name: propeller-test
-          image: europe-west1-docker.pkg.dev/propeller-385509/propeller-images/propeller-test:latest
-          ports:
-           —containerPort: 3000
+      - name: propeller-test
+        image: europe-west1-docker.pkg.dev/propeller-385509/propeller-images/propeller-test
+        ports:
+        - containerPort: 3000
