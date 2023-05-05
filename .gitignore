@@ -2,3 +2,7 @@ dist
 node_modules
 terraform/.terraform
 .terraform.lock.hcl
+terraform/plan.terraform
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
