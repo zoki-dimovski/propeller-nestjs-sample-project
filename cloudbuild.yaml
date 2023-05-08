@@ -12,32 +12,29 @@ steps:
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:${_IMAGE_TAG}
 
+# This step generates the new manifest
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: /bin/sh
+    secretEnv: ['GIT_ACCESS_TOKEN']
+    args:
+    - '-c'
+    - |
+      git clone https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git -b ${_CD_BRANCH}
+      echo "Updating image tag version ..."
+      cd propeller-deployment
+      sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
+      sed "s/COMMIT_SHA/${SHORT_SHA}/g" > deployment.yaml
+      echo "Pushing changes to k8s manifest repo ..."
+      git config --global user.name "zoran dimovski"
+      git config --global user.email "zoki.dimovski@gmail.com"
+      git add -A
+      git commit -m "[Cloud Builder] Updated image tag europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA from commit ${COMMIT_SHA}"
+      git push https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git ${_CD_BRANCH}
+
+  availableSecrets:
+    secretManager:
+    - versionName: projects/717056985576/secrets/GIT_ACCESS_TOKEN/versions/latest
+      env: 'GIT_ACCESS_TOKEN'
+
 options:
   logging: CLOUD_LOGGING_ONLY
-
-# # This step generates the new manifest
-#  - name: 'gcr.io/cloud-builders/docker'
-#    entrypoint: /bin/sh
-#    secretEnv: ['GIT_ACCESS_TOKEN']
-#    args:
-#    - '-c'
-#    - |
-#      git clone https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git -b ${_CD_BRANCH}
-#      echo "Updating image tag version ..."
-#      cd propeller-deployment
-#      sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
-#      sed "s/COMMIT_SHA/${SHORT_SHA}/g" > deployment.yaml
-#      echo "Pushing changes to k8s manifest repo ..."
-#      git config --global user.name "zoran dimovski"
-#      git config --global user.email "zoki.dimovski@gmail.com"
-#      git add -A
-#      git commit -m "[Cloud Builder] Updated image tag europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA from commit ${COMMIT_SHA}"
-#      git push https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git ${_CD_BRANCH}
-#
-#  availableSecrets:
-#    secretManager:
-#    - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
-#      env: 'GIT_ACCESS_TOKEN'
-  #
-  # options:
-  #   logging: CLOUD_LOGGING_ONLY
