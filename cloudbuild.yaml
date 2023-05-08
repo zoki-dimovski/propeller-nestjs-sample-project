@@ -31,10 +31,7 @@ steps:
     git commit -m "[Cloud Builder] Updated image tag europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA from commit ${COMMIT_SHA}"
     git push https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git ${_CD_BRANCH}
 
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
-    env: 'GIT_ACCESS_TOKEN'
+
 
  options:
    logging: CLOUD_LOGGING_ONLY
