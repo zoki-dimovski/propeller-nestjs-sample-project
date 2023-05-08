@@ -12,8 +12,14 @@ steps:
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:${_IMAGE_TAG}
 
+
+
 # This step generates the new manifest
   - name: 'gcr.io/cloud-builders/docker'
+    availableSecrets:
+    secretManager:
+    - versionName: projects/717056985576/secrets/GIT_ACCESS_TOKEN/versions/latest
+      env: 'GIT_ACCESS_TOKEN'
     entrypoint: /bin/sh
     secretEnv: ['GIT_ACCESS_TOKEN']
     args:
@@ -30,11 +36,6 @@ steps:
       git add -A
       git commit -m "[Cloud Builder] Updated image tag europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA from commit ${COMMIT_SHA}"
       git push https://zoki-dimovski:$$GIT_ACCESS_TOKEN@github.com/zoki-dimovski/propeller-deployment.git ${_CD_BRANCH}
-
-  availableSecrets:
-    secretManager:
-    - versionName: projects/717056985576/secrets/GIT_ACCESS_TOKEN/versions/latest
-      env: 'GIT_ACCESS_TOKEN'
 
 options:
   logging: CLOUD_LOGGING_ONLY
