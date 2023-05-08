@@ -1,10 +1,10 @@
 # Building Docker Image
 steps:
-- name: 'Build the docker image'
+- name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:$SHORT_SHA', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:${_IMAGE_TAG}', '.' ]
 
 # Pushing Docker Image
-- name: 'Push the docker image'
+- name: 'gcr.io/cloud-builders/docker'
   entrypoint: /bin/sh
   args:
   - -c
@@ -13,7 +13,7 @@ steps:
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:${_IMAGE_TAG}
 
 # This step generates the new manifest
-- name: 'Generate the kubernetes manifest'
+- name: 'gcr.io/cloud-builders/docker'
   entrypoint: /bin/sh
   secretEnv: ['GIT_ACCESS_TOKEN']
   args:
