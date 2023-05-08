@@ -13,11 +13,6 @@ steps:
     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPO}/propeller:${_IMAGE_TAG}
 
 
-
- availableSecrets:
-   secretManager:
-   - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
-     env: 'GIT_ACCESS_TOKEN'
   #
   # options:
   #   logging: CLOUD_LOGGING_ONLY
